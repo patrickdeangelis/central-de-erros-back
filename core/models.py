@@ -46,6 +46,15 @@ class Event(models.Model):
     def __str__(self):
         return self.level + " in " + str(self.agent)
 
+    @property.
+    def number_of_occurrences(self):
+        return Event.objects.filter(
+            title=self.title,
+            description=self.description,
+            level=self.level,
+            agent=self.agent,
+        ).count()
+
     class Meta:
         ordering = ["date"]
 

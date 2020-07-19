@@ -11,7 +11,16 @@ class AgentSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ("title", "description", "level", "agent", "date", "shelved")
+        fields = (
+            "title",
+            "description",
+            "level",
+            "agent",
+            "date",
+            "shelved",
+            "number_of_occurrences",
+        )
+        depth = 1
 
 
 class EventPatchSerializer(serializers.ModelSerializer):
