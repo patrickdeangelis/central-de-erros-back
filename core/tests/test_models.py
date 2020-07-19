@@ -1,14 +1,17 @@
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
 from core.models import Agent, Event
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 class TestModels(TestCase):
     def setUp(self):
         self.user = User.objects.create(
-            username="Jose", email="jose@gmail.com", password="xxxxxxxxxxxxxxxxxxxxxxx"
+            name="Jose", email="jose@gmail.com", password="xxxxxxxxxxxxxxxxxxxxxxx"
         )
         self.agent = Agent.objects.create(
             address="192.168.1.1",
@@ -26,7 +29,7 @@ class TestModels(TestCase):
 
     def test_user_exists(self):
         user = User.objects.get(email="jose@gmail.com")
-        self.assertEqual(user.username, "Jose")
+        self.assertEqual(user.name, "Jose")
 
     def test_agent_exists(self):
         agent = Agent.objects.get(address="192.168.1.1")

@@ -1,11 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+# from django.contrib.auth.models import User
 from django.core.validators import (
     MinLengthValidator,
     EmailValidator,
     validate_ipv4_address,
 )
-import datetime
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 class Agent(models.Model):
@@ -14,7 +18,7 @@ class Agent(models.Model):
         HOMOLOGATION = ("HOMOLOGATION", "HOMOLOGATION")
         DEV = ("DEV", "DEV")
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     address = models.GenericIPAddressField(
         validators=[validate_ipv4_address], null=True
     )

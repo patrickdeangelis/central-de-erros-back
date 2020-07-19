@@ -1,6 +1,10 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from core.models import Event, Agent
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 class TestAPI(TestCase):
@@ -15,11 +19,14 @@ class TestAPI(TestCase):
         }
 
         self.user = User.objects.create(
-            username="joao", email="joao@joao.com", password="any_password"
+            name="joao", email="joao@joao.com", password="any_password"
         )
 
         self.agent = Agent.objects.create(
-            address="192.168.1.1", env=Agent.Enviroments.DEV, version="1.1.1",
+            address="192.168.1.1",
+            env=Agent.Enviroments.DEV,
+            version="1.1.1",
+            user=self.user,
         )
         self.event = Event.objects.create(
             title="Event",
