@@ -44,6 +44,8 @@ class TestAPI(TestCase):
             shelved=False,
         )
 
+        self.client.force_login(self.user)
+
     def test_create_event(self):
         self.client.force_login(self.user)
         request = self.client.post(
