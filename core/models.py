@@ -46,7 +46,7 @@ class Event(models.Model):
     def __str__(self):
         return self.level + " in " + str(self.agent)
 
-    @property.
+    @property
     def number_of_occurrences(self):
         return Event.objects.filter(
             title=self.title,
