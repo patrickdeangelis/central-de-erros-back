@@ -12,6 +12,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = (
+            "id",
             "title",
             "description",
             "level",
@@ -21,6 +22,7 @@ class EventSerializer(serializers.ModelSerializer):
             "number_of_occurrences",
         )
         read_only_fields = (
+            "id",
             "title",
             "description",
             "level",
