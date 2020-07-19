@@ -76,7 +76,7 @@ class TestAPI(TestCase):
 
     def test_retrieve_events(self):
         request = self.client.get("/events/", content_type="application/json")
-        response_data = request.json()
+        response_data = request.json()["results"]
         self.assertEqual(response_data[0]["id"], self.event.pk)
         self.assertEqual(response_data[1]["id"], self.event_2.pk)
 
@@ -99,3 +99,61 @@ class TestAPI(TestCase):
         self.assertTrue(response_data["shelved"])
         self.assertNotEqual(response_data["description"], payload["description"])
 
+
+class TestAPIFilters(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(
+            name="joao", email="joao@joao.com", password="any_password"
+        )
+
+        self.agent = Agent.objects.create(
+            address="192.168.1.1",
+            env=Agent.Enviroments.DEV,
+            version="1.1.1",
+            user=self.user,
+        )
+        self.agent_2 = Agent.objects.create(
+            address="192.168.1.1",
+            env=Agent.Enviroments.HOMOLOGATION,
+            version="1.1.1",
+            user=self.user,
+        )
+        self.event = Event.objects.create(
+            title="Event",
+            level=Event.Levels.CRITICAL,
+            description="django.core.exceptions.ValidationError",
+            agent=self.agent,
+            shelved=False,
+        )
+
+        self.event_2 = Event.objects.create(
+            title="Event 2",
+            level=Event.Levels.DEBUG,
+            description="django.core.exceptions.ValidationError",
+            agent=self.agent_2,
+            shelved=False,
+        )
+
+        self.client.force_login(self.user)
+
+    def test_env_filter(self):
+        request = self.client.get("/events/?env=DEV", content_type="application/json")
+        response_data = request.json()["results"]
+
+        self.assertEqual(len(response_data), 1)
+
+    def test_search(self):
+        request = self.client.get(
+            "/events/?searchBy=level&search=CRITICAL", content_type="application/json"
+        )
+        response_data = request.json()["results"]
+
+        self.assertEqual(len(response_data), 1)
+
+    def test_order_by(self):
+        request = self.client.get(
+            "/events/?orderBy=level", content_type="application/json"
+        )
+        response_data = request.json()["results"]
+
+        self.assertEqual(response_data[0]["level"], "CRITICAL")
