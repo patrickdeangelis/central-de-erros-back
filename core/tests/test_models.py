@@ -11,9 +11,12 @@ class TestModels(TestCase):
             username="Jose", email="jose@gmail.com", password="xxxxxxxxxxxxxxxxxxxxxxx"
         )
         self.agent = Agent.objects.create(
-            address="192.168.1.1", env=Agent.Enviroments.DEV, version="1.1.1",
+            address="192.168.1.1",
+            env=Agent.Enviroments.DEV,
+            version="1.1.1",
+            user=self.user,
         )
-        Event.objects.create(
+        self.event = Event.objects.create(
             title="Event",
             level=Event.Levels.CRITICAL,
             description="django.core.exceptions.ValidationError",
@@ -44,37 +47,14 @@ class TestModels(TestCase):
         )
         self.assertRaises(ValidationError, event.full_clean)
 
+    def test_user_should_count_number_of_events(self):
+        Event.objects.create(
+            title="Event",
+            level=Event.Levels.CRITICAL,
+            description="django.core.exceptions.ValidationError",
+            agent=self.agent,
+            shelved=False,
+        )
+        occurences = self.event.number_of_occurrences
+        self.assertEqual(occurences, 2)
 
-# class TestAPI(TestCase):
-#     def setUp(self):
-#         self.user = User.objects.create(
-#             username="Jose", email="jose@gmail.com", password="xxxxxxxxxxxxxxxxxxxxxxx"
-#         )
-#         self.agent = Agent.objects.create(
-#             address="192.168.1.1", env=Agent.Enviroments.DEV, version="1.1.1",
-#         )
-#         self.event = Event.objects.create(
-#             title="Error",
-#             level=Event.Levels.DEBUG,
-#             description="django.core.exceptions.ValidationError",
-#             agent=self.agent,
-#             shelved=False,
-#         )
-
-#     def test_get_events(self):
-#         factory = APIRequestFactory()
-#         request = self.client.get("/events/")
-#         print(json.loads(request.data))
-#         print(self.event.date)
-#         self.assertEqual(
-#             json.loads(request.data),
-#             {
-#                 "id": 1,
-#                 "title": "Error",
-#                 "description": "django.core.exceptions.ValidationError",
-#                 "level": "DEBUG",
-#                 "shelved": False,
-#                 "date": "2020-07-18T20:28:23.749791Z",
-#                 "agent": 1,
-#             },
-#         )
