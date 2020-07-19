@@ -14,7 +14,7 @@ class Agent(models.Model):
         HOMOLOGATION = ("HOMOLOGATION", "HOMOLOGATION")
         DEV = ("DEV", "DEV")
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.GenericIPAddressField(
         validators=[validate_ipv4_address], null=True
     )
