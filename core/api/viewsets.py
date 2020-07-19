@@ -6,7 +6,6 @@ from .serializers import (
     AgentSerializer,
     EventSerializer,
     EventInputSerializer,
-    EventPatchSerializer,
 )
 from core.models import Event, Agent
 
@@ -62,9 +61,7 @@ class EventViewSet(ViewSet):
     def partial_update(self, request, pk=None):
         queryset = Event.objects.all()
         event = get_object_or_404(queryset, pk=pk)
-        # data = {"shelved": request.data["shelved"]}
-        # serializer = EventSerializer(event, data=data, partial=True)
-        serializer = EventPatchSerializer(event, data=request.data)
+        serializer = EventSerializer(event, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

@@ -20,13 +20,15 @@ class EventSerializer(serializers.ModelSerializer):
             "shelved",
             "number_of_occurrences",
         )
+        read_only_fields = (
+            "title",
+            "description",
+            "level",
+            "agent",
+            "date",
+            "number_of_occurrences",
+        )
         depth = 1
-
-
-class EventPatchSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = ["shelved"]
 
 
 class EventInputSerializer(serializers.Serializer):
