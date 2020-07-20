@@ -1,0 +1,29 @@
+language: python
+python:
+  - "3.6"
+  - "3.8"
+install:
+  - pip install -r requirements.txt
+  - pip install .
+# command to run tests
+script: pytest
+
+stages:
+  - name: test
+  - name: deploy
+
+jobs:
+  include:
+    - stage: test
+      name: Unit Tests
+      script: python manage.py test
+    - stage: deploy
+      name: Heroku Deploy
+      script: /bin/true
+      deploy:
+        provider: heroku
+        api_key:
+          secure: 39e83283-5d79-46dd-9aba-44ebcc795a3e
+        app: emr-acelera-ecomm
+        on: master
+        run: "python manage.py migrate"
