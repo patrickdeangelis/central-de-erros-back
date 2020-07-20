@@ -23,7 +23,7 @@ class UserAccountManager(BaseUserManager):
             raise ValueError("User must have email")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name, is_staff=True)
+        user = self.model(email=email, name=name, is_staff=True, is_superuser=True)
 
         user.set_password(password)
         user.save()
@@ -35,6 +35,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=150)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
 
     objects = UserAccountManager()
