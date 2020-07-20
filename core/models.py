@@ -25,8 +25,12 @@ class Agent(models.Model):
     env = models.CharField(max_length=20, choices=Enviroments.choices)
     version = models.CharField(max_length=5)
 
+    @property
+    def name(self):
+        self.user.name
+
     def __str__(self):
-        return self.user.username
+        return self.user.name + " - " + self.address
 
     class Meta:
         ordering = ["user"]
