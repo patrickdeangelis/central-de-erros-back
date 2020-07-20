@@ -16,13 +16,13 @@ jobs:
       script:
         - cp env-sample.env .env
         - python manage.py test
-    - stage: deploy
-      name: Heroku Deploy
-      script: /bin/true
-      deploy:
-        provider: heroku
-        api_key:
-          secure: 39e83283-5d79-46dd-9aba-44ebcc795a3e
-        app: emr-acelera-ecomm
-        on: master
-        run: "python manage.py migrate"
+    # - stage: deploy
+    #   name: Heroku Deploy
+    #   script: /bin/true
+    #   deploy:
+    #     provider: heroku
+    #     api_key:
+    #       secure: 39e83283-5d79-46dd-9aba-44ebcc795a3e
+    #     app: emr-acelera-ecomm
+    #     on: master
+    #     run: "python manage.py migrate"
