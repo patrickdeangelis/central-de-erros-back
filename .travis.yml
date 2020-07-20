@@ -1,7 +1,10 @@
 language: python
 python:
-  - "3.6"
   - "3.8"
+
+install:
+  - cp env-sample.env .env
+  - pip install -q -r requiriments.txt
 
 stages:
   - name: test
