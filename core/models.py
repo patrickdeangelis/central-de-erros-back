@@ -27,10 +27,10 @@ class Agent(models.Model):
 
     @property
     def name(self):
-        self.user.name
+        return self.user.get_full_name()
 
     def __str__(self):
-        return self.user.name + " - " + self.address
+        return self.user.get_full_name() + " - " + self.address
 
     class Meta:
         ordering = ["user"]

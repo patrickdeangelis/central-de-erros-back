@@ -5,10 +5,13 @@ from core.models import Agent, Event
 class AgentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Agent
-        fields = ("user", "adress", "env", "version")
+        fields = ("user", "address", "env", "version", "name")
+        read_only_fields = ["name"]
 
 
 class EventSerializer(serializers.ModelSerializer):
+    agent = AgentSerializer(many=False, read_only=True)
+
     class Meta:
         model = Event
         fields = (
@@ -16,9 +19,9 @@ class EventSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "level",
-            "agent",
             "date",
             "shelved",
+            "agent",
             "number_of_occurrences",
         )
         read_only_fields = (
@@ -26,11 +29,10 @@ class EventSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "level",
-            "agent",
             "date",
             "number_of_occurrences",
         )
-        depth = 2
+        depth = 1
 
 
 class EventInputSerializer(serializers.Serializer):
