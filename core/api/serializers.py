@@ -30,7 +30,7 @@ class EventSerializer(serializers.ModelSerializer):
             "date",
             "number_of_occurrences",
         )
-        depth = 1
+        depth = 2
 
 
 class EventInputSerializer(serializers.Serializer):
