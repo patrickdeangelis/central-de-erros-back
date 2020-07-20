@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # installed apps
     "rest_framework",
     "djoser",
+    "corsheaders",
     # application apps
     "accounts",
     "core",
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = "error_center.urls"
@@ -154,6 +157,7 @@ DJOSER = {
     },
 }
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 AUTH_USER_MODEL = "accounts.UserAccount"
 
