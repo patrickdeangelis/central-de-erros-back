@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # application apps
     "accounts",
     "core",
+    "docs",
 ]
 
 MIDDLEWARE = [

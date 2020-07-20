@@ -1,0 +1,385 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Central de Erros"
+
+schemes:
+- "https"
+- "http"
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    in: header
+    name: JWT
+    
+tags:
+- name: Auth
+  description: JWT authentication
+- name: Events
+  description: Log events
+
+paths:
+  /events/:
+    get:
+      security:
+      - bearerAuth: []
+      tags: 
+      - Events
+      summary: Return list of events
+      produces:
+      - "application/json"
+      parameters:
+        - in: "query"
+          name: env
+          type: string
+          description: Enviroment
+        - in: "query"
+          name: search
+          type: string
+          description: Search text
+        - in: "query"
+          name: searchBy
+          type: string
+          description: In what field it will be searched
+        - in: "query"
+          name: orderBy
+          type: string
+          description: The field used to ordenate results
+      responses:
+        '200':
+          description: Return list of events
+          schema:
+            $ref: '#/definitions/EventList'
+    post:
+      security:
+      - bearerAuth: []
+      tags: 
+      - Events
+      summary: Create an events
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: 'body'
+          required: true
+          name: 'body'
+          schema:
+            $ref: '#/definitions/CreateEvent'
+      responses:
+        '201':
+          description: Return list of events
+          schema:
+            $ref: '#/definitions/Event'
+    
+  /events/{id}/:
+    get:
+      security:
+      - bearerAuth: []
+      tags: 
+      - Events
+      summary: Return a single events
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: id
+          required: true
+          type: integer
+          description: Enviroment
+      responses:
+        '200':
+          description: "Return list of events"
+          schema:
+            $ref: '#/definitions/Event'
+        '404':
+          description: "Event no exists"
+    delete:
+      security:
+      - bearerAuth: []
+      tags:
+      - Events
+      summary: Delete an event
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: id
+          required: True
+          type: integer
+          description: Enviroment
+      responses:
+        '200':
+          description: OK
+    
+  /auth/jwt/create/:
+    post:
+      tags:
+      - Auth
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/AuthPayload'
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/JWTResponse'
+            
+  /auth/jwt/refresh/:
+    post:
+      tags:
+      - Auth
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/RefreshPayload'
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/RefreshResponse'
+                      
+  /auth/users/:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+      - Auth
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+        - in: 'body'
+          name: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/RefreshPayload'
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/UserCreate'
+    
+    get:
+      security:
+      - bearerAuth: []
+      tags:
+      - Auth
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserCreate'
+  
+  /auth/users/{id}:
+    get:
+      security:
+      - bearerAuth: []
+      tags:
+      - Auth
+      produces:
+      - "application/json"
+      parameters:
+        - in: "path"
+          name: id
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            items:
+              $ref: '#/definitions/UserCreate'
+        "404":
+          description: "user no exists"
+  
+  /auth/users/reset_password/:
+    post:
+      tags:
+      - Auth
+      consumes:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: body
+          required: true
+          schema:
+            properties:
+              email:
+                type: 'string'
+      responses:
+        "204":
+          description: "successful operation"
+        "400":
+          description: "email not exists"
+          
+  /auth/users/reset_password_confirm/:
+    post:
+      tags:
+      - Auth
+      consumes:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: body
+          required: true
+          schema:
+            properties:
+              uid:
+                type: 'string'
+              token:
+                type: 'string'
+              new_password:
+                type: 'string'
+              re_new_password:
+                type: 'string'
+      responses:
+        "204":
+          description: "successful operation"
+        "400":
+          description: "bad request"  
+          schema:
+            properties:
+              uid:
+                type: 'string'
+              token:
+                type: 'string'
+              new_password:
+                type: 'string'
+  
+definitions:
+  RefreshResponse:
+      type: 'object'
+      properties:
+        access:
+          type: 'string'
+  RefreshPayload:
+    type: 'object'
+    properties:
+      refresh:
+        type: 'string'
+  UserCreate:
+    type: 'object'
+    properties:
+      email: 
+        type: 'string'
+      name:
+        type: 'string'
+      password:
+        type: 'string'
+  JWTResponse:
+    type: 'object'
+    properties:
+      refresh:
+        type: 'string'
+      access:
+        type: 'string'
+  AuthPayload:
+    type: 'object'
+    properties:
+      email:
+        type: 'string'
+      password:
+        type: 'string'
+        
+  Agent: 
+    type: "object"
+    properties:
+      id: 
+        type: "string"
+      address: 
+        type: "string"
+      env: 
+        type: "string"
+        enum:
+        - "PRODUCTION"
+        - "HOMOLOGATION"
+        - "DEV"
+      version: 
+        type: "string"
+      user: 
+        type: "integer"
+
+  Event:
+    type: "object"
+    properties:
+      id: 
+        type: "integer"
+      title: 
+        type: "string"
+      description: 
+        type: "string"
+      agent:
+        $ref: '#/definitions/Agent'
+      level: 
+        type: "string"
+        enum:
+        - "CRITICAL"
+        - "DEBUG"
+        - "ERROR"
+        - "WARNING"
+        - "INFO"
+      date: 
+        type: "string"
+      shelved: 
+        type: "boolean"
+      number_of_occurrences: 
+        type: "integer"
+  
+  EventList:
+    type: "object"
+    properties:
+      count: 
+        type: "integer"
+      next: 
+        type: "string"
+      previous: 
+        type: "string"
+      results:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+          
+  CreateEvent:
+    type: 'object'
+    properties:
+      env: 
+        type: "string"
+        enum:
+        - "PRODUCTION"
+        - "HOMOLOGATION"
+        - "DEV"
+      version:
+        type: "string"
+      title: 
+        type: "string"
+      description: 
+        type: "string"
+      level: 
+        type: "string"
+        enum:
+        - "CRITICAL"
+        - "DEBUG"
+        - "ERROR"
+        - "WARNING"
+        - "INFO"
+      
