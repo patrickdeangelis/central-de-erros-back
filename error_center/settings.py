@@ -151,7 +151,9 @@ SIMPLE_JWT = {
 
 DJOSER = {
     "LOGIN_FIELD": "email",
-    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": config(
+        "PASSWORD_RESET_CONFIRM_URL", default="#/password/reset/confirm/{uid}/{token}"
+    ),
     "SERIALIZERS": {
         "user_create": "accounts.api.serializers.UserAccountCreateSerializer",
         "user": "accounts.api.serializers.UserAccountCreateSerializer",
