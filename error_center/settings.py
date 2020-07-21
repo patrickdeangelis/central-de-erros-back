@@ -163,7 +163,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 AUTH_USER_MODEL = "accounts.UserAccount"
 
-EXTERNAL_RESET_CONFIRM_URL = config(
-    "PASSWORD_RESET_CONFIRM_URL", default="#/password/reset/"
-)
+EXTERNAL_RESET_CONFIRM_URL = config("PASSWORD_RESET_CONFIRM_URL")
 
