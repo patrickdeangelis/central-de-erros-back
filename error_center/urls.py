@@ -26,5 +26,5 @@ urlpatterns = [
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
     path("docs/", home),
-    path("reset_redirect/<str: uid>/<str: token>", redirect_reset_password),
+    path("reset_redirect/<str:uid>/<str:token>", redirect_reset_password),
 ]
