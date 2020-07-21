@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 
 from core.api.urls import router
+from core.views import redirect_reset_password
 from docs.views import home
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
     path("docs/", home),
+    path("reset_redirect/<str: uid>/<str: token>", redirect_reset_password),
 ]

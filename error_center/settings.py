@@ -151,9 +151,7 @@ SIMPLE_JWT = {
 
 DJOSER = {
     "LOGIN_FIELD": "email",
-    "PASSWORD_RESET_CONFIRM_URL": config(
-        "PASSWORD_RESET_CONFIRM_URL", default="#/password/reset/confirm/{uid}/{token}"
-    ),
+    "PASSWORD_RESET_CONFIRM_URL": "reset_redirect/{uid}/{token}/",
     "SERIALIZERS": {
         "user_create": "accounts.api.serializers.UserAccountCreateSerializer",
         "user": "accounts.api.serializers.UserAccountCreateSerializer",
@@ -164,4 +162,8 @@ DJOSER = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 AUTH_USER_MODEL = "accounts.UserAccount"
+
+EXTERNAL_RESET_CONFIRM_URL = config(
+    "PASSWORD_RESET_CONFIRM_URL", default="#/password/reset/"
+)
 
