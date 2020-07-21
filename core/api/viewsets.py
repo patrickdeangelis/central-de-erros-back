@@ -22,7 +22,7 @@ class EventViewSet(
 
     def get_queryset(self):
         env = self.request.query_params.get("env", None)
-        orderBy = self.request.query_params.get("orderBy", None)
+        orderBy = self.request.query_params.get("orderBy", "date")
         searchBy = self.request.query_params.get("searchBy", None)
         search = self.request.query_params.get("search", None)
         queryset = Event.objects.all()
